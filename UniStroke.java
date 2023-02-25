@@ -301,7 +301,7 @@ public class UniStroke {
     Point firstPoint = resampledPoints.get(0);
     // Calculating the slope to rotate the templates to a certain angle.
     double slope = Math.atan2((firstPoint.y - centroid.y), (firstPoint.x - centroid.x));
-    ArrayList<Point> rotatedPoints = pointProcessor.rotateBy(resampledPoints, -1 * slope, centroid);
+    ArrayList<Point> rotatedPoints = PointProcessor.rotateBy(resampledPoints, -1 * slope, centroid);
 
     // Scaling the tempates one by one
     pointProcessor.scale(rotatedPoints);
