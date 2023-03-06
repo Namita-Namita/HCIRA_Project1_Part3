@@ -79,7 +79,7 @@ public class TrainandTest {
 
                     // iterate through training sample size
                     for (int i = 0; i < 10; i++) {
-                        for (int trainingSampleSize = 2; trainingSampleSize <= 9; trainingSampleSize++) {
+                        for (int trainingSampleSize = 1; trainingSampleSize <=9; trainingSampleSize++) {
                             for (int l = 0; l < userData.size(); l++) {
                                 Collections.shuffle(userData.get(l)); //shuffle the user data
                             }
@@ -100,7 +100,7 @@ public class TrainandTest {
 
                             // iterate through the gestures
                             for (int gestures = 0; gestures < 16; gestures++) {
-                                Timer tempTimer = new Timer();
+                                //Timer tempTimer = new Timer();
 
                                 // get n best list by passing the training set and gesture to be tested
                                 DollarOneRecognizer dollarOneRecognizer = new DollarOneRecognizer();
@@ -108,7 +108,7 @@ public class TrainandTest {
                                         .Recognize(userData.get(gestures).get(9), trainingSet);
 
                                 // writing to the log
-                                timePerTrainingSamples[trainingSampleSize - 2] += tempTimer.getTime();
+                                //timePerTrainingSamples[trainingSampleSize - 2] += tempTimer.getTime();
 
                                 logger.write((user + ",").getBytes());
 
@@ -124,13 +124,17 @@ public class TrainandTest {
                                 logger.write(("\"{").getBytes());
                                 for (int m = 0; m < trainingSet.size(); m++) {
                                     for (int n = 0; n < trainingSet.get(m).size(); n++) {
-                                        logger.write((userID + "-" + userData.get(m).get(n).gesture + "-"
-                                                + userData.get(m).get(n).gestureNumber + ",").getBytes());
+                                        if(m==trainingSet.size()-1 && n==trainingSet.get(m).size()-1)
+                                        logger.write((user + "-" + userData.get(m).get(n).gesture + "-"
+                                                + userData.get(m).get(n).gestureNumber).getBytes());
+                                        else
+                                        logger.write((user + "-" + userData.get(m).get(n).gesture + "-"
+                                        + userData.get(m).get(n).gestureNumber + ",").getBytes());
                                     }
                                 }
-                                logger.write(("}\",").getBytes());
+                                logger.write(("}\""+",").getBytes());
 
-                                logger.write((userID + "-" + userData.get(gestures).get(9).gesture + "-"
+                                logger.write((user + "-" + userData.get(gestures).get(9).gesture + "-"
                                         + userData.get(gestures).get(9).gestureNumber + ",").getBytes());
 
                                 // best match
@@ -151,18 +155,21 @@ public class TrainandTest {
                                 logger.write((nbestList.get(0).score + ",").getBytes());
 
                                 // log best match instance
-                                logger.write((userID + "-" + nbestList.get(0).gesture + "-"
+                                logger.write((user + "-" + nbestList.get(0).gesture + "-"
                                         + nbestList.get(0).gestureNumber + ",").getBytes());
 
                                 // log nbestlist
                                 logger.write(("\"{").getBytes());
-                                for (int m = 0; m < nbestList.size(); m++) {
-                                    logger.write((userID + "-" + nbestList.get(m).gesture + "-"
-                                    + nbestList.get(0).gestureNumber + "," + nbestList.get(m).score).getBytes());
-                                    if (m != nbestList.size() - 1) {
-                                        logger.write((",").getBytes());
+                                for (int m = 0; m < nbestList.size()-1; m++) {
+                                    logger.write((user + "-" + nbestList.get(m).gesture + "-"
+                                    + nbestList.get(m).gestureNumber + "," + nbestList.get(m).score+",").getBytes());
+                                    if (m > 51) {
+                                       break;
+
                                     }
                                 }
+                                logger.write((user + "-" + nbestList.get(nbestList.size()-1).gesture + "-"
+                                    + nbestList.get(nbestList.size()-1).gestureNumber + "," + nbestList.get(nbestList.size()-1).score).getBytes());
                                 logger.write(("}\"").getBytes());
                                 logger.write(("\n").getBytes());
                             }

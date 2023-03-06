@@ -50,22 +50,28 @@ public class DollarOneRecognizer {
         // iterate through the templates
         for (int i = 0; i < templates.size(); i++) {
             double b = Double.POSITIVE_INFINITY;
-            int gestureNumber = 0;
+            //int gestureNumber = 0;
 
             //iterate through each template
             for (int j = 0; j < templates.get(i).size(); j++) {
                 double d = PointProcessor.distanceAtBestAngle(points.points, templates.get(i).get(j).points);
-
+                // gestureNumber=j+1;
                 if (d < b) {
                     b = d;
-                    gestureNumber = j + 1;
+                    
                 }
+               
+                double score = 1 - b / (.5 * Math.sqrt(250 * 250 + 250 * 250));
+               // System.out.println(templates.get(i).get(j).gesture + "-"+score +"-"+ templates.get(i).get(j).gestureNumber);
+
+                // adding to the nbestList gesture type, score and gesture number
+                nbestList.add(new CustomReturnType(templates.get(i).get(j).gesture, Double.parseDouble(String.format("%.5f", score)), templates.get(i).get(j).gestureNumber));
             }
 
-            double score = 1 - b / (.5 * Math.sqrt(250 * 250 + 250 * 250));
+            // double score = 1 - b / (.5 * Math.sqrt(250 * 250 + 250 * 250));
 
-            // adding to the nbestList gesture type, score and gesture number
-            nbestList.add(new CustomReturnType(templates.get(i).get(0).gesture, score, gestureNumber));
+            // // adding to the nbestList gesture type, score and gesture number
+            // nbestList.add(new CustomReturnType(templates.get(i).get(0).gesture, score, gestureNumber));
         }
 
         // sorting before returining the list
